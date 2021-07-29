@@ -16,7 +16,7 @@ namespace Console.Web
 
         private static async Task Test(string first, string second)
         {
-            var registerOperation = new AddTwoDifferentStringsOperation();
+            var registerOperation = new AddTwoStringsOperation();
             await registerOperation.ExecuteAsync(new AddTwoStringsInput { First = first, Second = second });
 
             var toPrint = registerOperation.Match(

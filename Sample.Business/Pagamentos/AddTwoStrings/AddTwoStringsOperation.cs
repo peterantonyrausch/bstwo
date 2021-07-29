@@ -1,27 +1,30 @@
 ﻿using BS2.Foundation.Operations.Async;
-using BS2.Foundation.Validations;
 using System.Threading.Tasks;
 
 namespace Sample.Business.Pagamentos.AddTwoStrings
 {
-    public class AddTwoDifferentStringsOperation : InOutAsyncOperation<AddTwoStringsInput, AddTwoStringsOutput>
+    public class AddTwoStringsOperation : InOutAsyncOperation<AddTwoStringsInput, AddTwoStringsOutput>
     {
         public override Task ExecuteAsync(AddTwoStringsInput input)
         {
-            AddValidations(
-                Validates.ThatMembers()
-                    .IsNotNullOrWhiteSpace(input.First, "Please enter the first value", "First")
-                    .IsNotNullOrWhiteSpace(input.Second, "Please enter the second value", "Second")
-            );
+            if (string.IsNullOrWhiteSpace(input.First))
+            {
+                AddError("Please enter the first value", "First");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.Second))
+            {
+                AddError("Please enter the second value", "Second");
+            }
 
             if (!decimal.TryParse(input.First, out var first))
             {
-                AddWarning(nameof(AddTwoStringsInput.First), "First value is not a valid decimal and will be considered zero.");
+                AddError(nameof(AddTwoStringsInput.First), "First value is not a valid decimal and will be considered zero.");
             }
 
             if (!decimal.TryParse(input.Second, out var second))
             {
-                AddWarning(nameof(AddTwoStringsInput.Second), "Second value is not a valid decimal and will be considered zero.");
+                AddError(nameof(AddTwoStringsInput.Second), "Second value is not a valid decimal and will be considered zero.");
             }
 
             if (first == second)
